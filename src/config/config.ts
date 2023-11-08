@@ -23,6 +23,9 @@ const CONFIG: ConfigType  = {
         app: {
             PORT: process.env.PORT || 4001
         },
+        db: {
+            URI: ""
+        }
     },
     production: {
         app: {
