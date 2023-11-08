@@ -10,10 +10,14 @@ type ConfigType = {
     [key: string] : EnvironmentConfig
 }
 type EnvironmentConfig = {
-    app : AppConfig
+    app : AppConfig,
+    db: DbConfig
 }
 type AppConfig = {
     PORT: string | number
+}
+type DbConfig = {
+    URI: string
 }
 
 const ENV = process.env.NODE_ENV ?? 'development'
@@ -24,12 +28,15 @@ const CONFIG: ConfigType  = {
             PORT: process.env.PORT || 4001
         },
         db: {
-            URI: ""
+            URI: process.env.URI || "mongodb:/localhost:27017"
         }
     },
     production: {
         app: {
             PORT: process.env.PORT || 4002
+        }, 
+        db: {
+            URI: process.env.URI || "mongodb:/localhost:27017"
         }
     }
 }
