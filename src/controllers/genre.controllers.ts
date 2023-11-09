@@ -22,7 +22,7 @@ export const createGenre = (req: Request, res: Response) => {
     if(!req.body.name || req.body.name.length < 3){
         res.status(400).send('Name is required and should be minimum 3 characters')
     }
-
+    
     const genre = {
         id: genres.length + 1,
         name: req.body.name,
