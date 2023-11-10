@@ -1,8 +1,7 @@
-import Express, { Request, Response } from 'express'
+import Express from 'express'
 import userRoutes from './routes/user.routes'
 
 const app = Express()
-
 
 app.use(Express.json())
 app.use(Express.text())

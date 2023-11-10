@@ -1,14 +1,15 @@
 import { Schema, model, Document } from "mongoose";
 
 export interface UserInterface extends Document{
-    name: string,
-    email: string,
-    password: string, 
-    createdAt?: Date,
+    name: string
+    email: string
+    password: string 
+    movies?: string[]
+    createdAt?: Date
     updatedAt?: Date
 }
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<UserInterface>(
   {
     name: {
       type: String,
@@ -24,7 +25,8 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: true,
-    }
+    },
+    movies: [{type: Schema.Types.ObjectId, ref: "Movie"}] 
   },
   { timestamps: true, versionKey: false }
 );
