@@ -15,7 +15,7 @@ export const createUser = async (req: Request, res: Response) => {
 export const getUserById = async (req: Request, res: Response) => {
   const { userId } = req.params;
   try {
-    const user = await UserModel.findById({ _id: userId }).populate("movies");
+    const user = await UserModel.findById({ _id: userId }).populate("movies") ;
     if (!user) res.status(500).send("The user doesn't exist");
     res.status(200).json(user);
   } catch (error) {
@@ -50,3 +50,4 @@ export const deleteUser = async (req: Request, res: Response) => {
     res.status(500).json(error);
   }
 };
+
