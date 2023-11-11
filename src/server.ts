@@ -1,10 +1,14 @@
-import Express from 'express'
-import userRoutes from './routes/user.routes'
+import Express from "express";
+import userRoutes from "./routes/user.routes";
+import movieRoutes from "./routes/movie.routes";
+import genreRoutes from "./routes/genre.routes";
 
-const app = Express()
+const app = Express();
 
-app.use(Express.json())
-app.use(Express.text())
-app.use("/users", userRoutes)
+app.use(Express.json());
+app.use(Express.text());
+app.use("/users", userRoutes);
+app.use("/movies", movieRoutes);
+app.use("/genres", genreRoutes)
 
-export default app
+export default app;

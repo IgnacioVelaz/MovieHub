@@ -1,14 +1,19 @@
-import { Router } from 'express'
-import { createMovie, deleteMovie, updateMovie, getMovies } from '../controllers/movie.controllers'
+import { Router } from "express";
+import {
+  createMovie,
+  deleteMovie,
+  getMovieById,
+  getMoviesByUserId,
+  updateMovie,
+} from "../controllers/movie.controllers";
 
-const movieRoutes = Router()
+const movieRoutes = Router();
 
-movieRoutes.get('/', getMovies)
+movieRoutes.get("/:userId", getMoviesByUserId);
+movieRoutes.post("/:userId", createMovie);
 
-movieRoutes.post('/', createMovie)
+movieRoutes.get("/:userId/:movieId", getMovieById);
+movieRoutes.patch("/:userId/:movieId", updateMovie);
+movieRoutes.delete("/:userId/:movieId", deleteMovie);
 
-movieRoutes.put('/:movieID', updateMovie)
-
-movieRoutes.delete('/:movieID', deleteMovie)
-
-export default movieRoutes
+export default movieRoutes;
