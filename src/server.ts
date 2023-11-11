@@ -8,7 +8,6 @@ const morgan = require('morgan')
 const app = Express();
 
 app.use(helmet())
-app.use(morgan('tiny'))
 app.use(Express.json());
 
 
