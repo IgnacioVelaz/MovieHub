@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { UserModel } from "../models/user.model";
 import { MovieModel } from "../models/movie.model";
+import { GenreModel } from "../models/genre.model";
 
 export const createMovie = async (req: Request, res: Response) => {
   const { name, poster_image, genre, score } = req.body;
+  console.log(genre)
   const { userId } = req.params;
   try {
     const movie = await MovieModel.create({
@@ -19,8 +21,14 @@ export const createMovie = async (req: Request, res: Response) => {
       { $push: { movies: movie._id } }
     );
 
+    await GenreModel.updateMany(
+      { _id: { $in: genre } },
+      { $push: { movies: movie._id } }
+    );
+
     res.status(201).json(movie);
   } catch (error) {
+    console.log(error)
     res.status(500).json(error);
   }
 };
@@ -45,7 +53,7 @@ export const getMovieById = async (req: Request, res: Response) => {
     const movie = await MovieModel.findById({ _id: movieId }).populate("genre");
     res.status(200).json(movie);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -77,6 +85,10 @@ export const deleteMovie = async (req: Request, res: Response) => {
   try {
     const { movieId } = req.params;
     const deletedMovie = await MovieModel.findByIdAndDelete({ _id: movieId });
+    
+    await UserModel.updateMany({movies: movieId}, {$pull: {movies: movieId }})
+    await GenreModel.updateMany({movies: movieId}, {$pull: {movies: movieId}})
+
     res.status(200).json(deletedMovie);
   } catch (error) {
     res.status(500).json(error);
