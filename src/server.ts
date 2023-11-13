@@ -3,7 +3,6 @@ import helmet from "helmet";
 import userRoutes from "./routes/user.routes";
 import movieRoutes from "./routes/movie.routes";
 import genreRoutes from "./routes/genre.routes";
-const morgan = require('morgan')
 
 const app = Express();
 
