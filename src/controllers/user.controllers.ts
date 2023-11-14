@@ -20,7 +20,6 @@ export const createUser = async (req: Request, res: Response) => {
 
     res.status(201).json(newUser);
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 };
@@ -48,7 +47,6 @@ export const getUserById = async (req: Request, res: Response) => {
 
     res.status(200).json(user);
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 };
@@ -70,14 +68,12 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  console.log(userId);
   try {
     const deletedUser = await prisma.user.delete({
       where: { id: userId },
     });
     res.status(200).json(deletedUser);
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 };

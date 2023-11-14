@@ -45,7 +45,6 @@ export const getMoviesByUserId = async (req: Request, res: Response) => {
 
     res.status(200).json(user);
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 };
@@ -68,8 +67,6 @@ export const getMovieById = async (req: Request, res: Response) => {
 
     res.status(200).json(movie);
   } catch (error) {
-    console.log(error);
-
     res.status(500).json(error);
   }
 };
@@ -91,7 +88,6 @@ export const updateMovie = async (req: Request, res: Response) => {
 
     res.status(201).json(updatedMovie);
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 };
@@ -106,8 +102,6 @@ export const deleteMovie = async (req: Request, res: Response) => {
 
     res.status(200).json(deletedMovie);
   } catch (error) {
-    console.log(error);
-
     res.status(500).json(error);
   }
 };
