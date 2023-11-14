@@ -29,68 +29,88 @@ export const createMovie = async (req: Request, res: Response) => {
 
 export const getMoviesByUserId = async (req: Request, res: Response) => {
   const { userId } = req.params;
-
   try {
-    const movies = await UserModel.findById(
-      { _id: userId },
-      { movies: 1, _id: 0 }
-    ).populate("movies");
-    res.status(200).json(movies);
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        movies: {
+          select: {
+            name: true,
+            poster_image: true,
+            score: true,
+            genres: {
+              select: { name: true },
+            },
+          },
+        },
+      },
+    });
+
+    res.status(200).json(user);
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 };
 
 export const getMovieById = async (req: Request, res: Response) => {
+  const { movieId } = req.params;
+
   try {
-    const { movieId } = req.params;
-    const movie = await MovieModel.findById({ _id: movieId }).populate("genre");
+    const movie = await prisma.movies.findUnique({
+      where: { id: movieId },
+      select: {
+        name: true,
+        poster_image: true,
+        score: true,
+        genres: {
+          select: { name: true },
+        },
+      },
+    });
+
     res.status(200).json(movie);
   } catch (error) {
     console.log(error);
-    res.status(500).send(error);
+
+    res.status(500).json(error);
   }
 };
 
 export const updateMovie = async (req: Request, res: Response) => {
-  try {
-    const { movieId } = req.params;
-    const { name, poster_image, genre, score } = req.body;
+  const { name, poster_image, genresIds, score } = req.body;
+  const { movieId } = req.params;
 
-    const updatedMovie = await MovieModel.findByIdAndUpdate(
-      { _id: movieId },
-      {
-        $set: {
-          name: name,
-          poster_image: poster_image,
-          genre: genre,
-          score: score,
-        },
+  try {
+    const updatedMovie = await prisma.movies.update({
+      where: { id: movieId },
+      data: {
+        name: name,
+        poster_image: poster_image,
+        score: score,
+        genresIds: genresIds,
       },
-      { new: true }
-    );
+    });
+
     res.status(201).json(updatedMovie);
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 };
 
 export const deleteMovie = async (req: Request, res: Response) => {
-  try {
-    const { movieId } = req.params;
-    const deletedMovie = await MovieModel.findByIdAndDelete({ _id: movieId });
+  const { movieId } = req.params;
 
-    await UserModel.updateMany(
-      { movies: movieId },
-      { $pull: { movies: movieId } }
-    );
-    await GenreModel.updateMany(
-      { movies: movieId },
-      { $pull: { movies: movieId } }
-    );
+  try {
+    const deletedMovie = await prisma.movies.delete({
+      where: { id: movieId },
+    });
 
     res.status(200).json(deletedMovie);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json(error);
   }
 };
