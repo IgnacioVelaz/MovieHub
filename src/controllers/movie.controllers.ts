@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
 import prisma from "../db/client";
-import { MovieModel } from "../models/movie.model";
-import { UserModel } from "../models/user.model";
-import { GenreModel } from "../models/genre.model";
 
 export const createMovie = async (req: Request, res: Response) => {
   const { name, poster_image, genres, score } = req.body;
