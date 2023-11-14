@@ -27,36 +27,6 @@ export const createMovie = async (req: Request, res: Response) => {
   }
 };
 
-// export const createMovie = async (req: Request, res: Response) => {
-//   const { name, poster_image, genre, score } = req.body;
-//   console.log(genre);
-//   const { userId } = req.params;
-//   try {
-//     const movie = await MovieModel.create({
-//       name,
-//       poster_image,
-//       genre,
-//       score,
-//       userId,
-//     });
-//     console.log(movie);
-//     await UserModel.findByIdAndUpdate(
-//       { _id: userId },
-//       { $push: { movies: movie._id } }
-//     );
-
-//     await GenreModel.updateMany(
-//       { _id: { $in: genre } },
-//       { $push: { movies: movie._id } }
-//     );
-
-//     res.status(201).json(movie);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json(error);
-//   }
-// };
-
 export const getMoviesByUserId = async (req: Request, res: Response) => {
   const { userId } = req.params;
 

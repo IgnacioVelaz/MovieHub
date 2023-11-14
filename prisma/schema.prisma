@@ -81,7 +81,7 @@ model Movies {
   updatedAt    DateTime @updatedAt
   genresIds    String[] @db.ObjectId
   genres       Genres[] @relation(fields: [genresIds], references: [id])
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String   @db.ObjectId
 
   @@map("movies")
