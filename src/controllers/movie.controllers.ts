@@ -1,37 +1,61 @@
 import { Request, Response } from "express";
-import { UserModel } from "../models/user.model";
+import prisma from "../db/client";
 import { MovieModel } from "../models/movie.model";
+import { UserModel } from "../models/user.model";
 import { GenreModel } from "../models/genre.model";
 
 export const createMovie = async (req: Request, res: Response) => {
-  const { name, poster_image, genre, score } = req.body;
-  console.log(genre)
+  const { name, poster_image, genres, score } = req.body;
   const { userId } = req.params;
+
   try {
-    const movie = await MovieModel.create({
-      name,
-      poster_image,
-      genre,
-      score,
-      userId,
+    const movie = await prisma.movies.create({
+      data: {
+        name,
+        poster_image,
+        score,
+        genres: {
+          connect: genres.map((genre: string) => ({ id: genre })),
+        },
+        user: { connect: { id: userId } },
+      },
     });
-    console.log(movie);
-    await UserModel.findByIdAndUpdate(
-      { _id: userId },
-      { $push: { movies: movie._id } }
-    );
 
-    await GenreModel.updateMany(
-      { _id: { $in: genre } },
-      { $push: { movies: movie._id } }
-    );
-
-    res.status(201).json(movie);
+    res.status(201).send(movie);
   } catch (error) {
-    console.log(error)
-    res.status(500).json(error);
+    res.status(500).send(error);
   }
 };
+
+// export const createMovie = async (req: Request, res: Response) => {
+//   const { name, poster_image, genre, score } = req.body;
+//   console.log(genre);
+//   const { userId } = req.params;
+//   try {
+//     const movie = await MovieModel.create({
+//       name,
+//       poster_image,
+//       genre,
+//       score,
+//       userId,
+//     });
+//     console.log(movie);
+//     await UserModel.findByIdAndUpdate(
+//       { _id: userId },
+//       { $push: { movies: movie._id } }
+//     );
+
+//     await GenreModel.updateMany(
+//       { _id: { $in: genre } },
+//       { $push: { movies: movie._id } }
+//     );
+
+//     res.status(201).json(movie);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json(error);
+//   }
+// };
 
 export const getMoviesByUserId = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -85,9 +109,15 @@ export const deleteMovie = async (req: Request, res: Response) => {
   try {
     const { movieId } = req.params;
     const deletedMovie = await MovieModel.findByIdAndDelete({ _id: movieId });
-    
-    await UserModel.updateMany({movies: movieId}, {$pull: {movies: movieId }})
-    await GenreModel.updateMany({movies: movieId}, {$pull: {movies: movieId}})
+
+    await UserModel.updateMany(
+      { movies: movieId },
+      { $pull: { movies: movieId } }
+    );
+    await GenreModel.updateMany(
+      { movies: movieId },
+      { $pull: { movies: movieId } }
+    );
 
     res.status(200).json(deletedMovie);
   } catch (error) {
