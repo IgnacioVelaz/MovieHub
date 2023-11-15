@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
-import prisma from "../db/client";
+import { prismaClient } from "../db/client";
+import { convertToType } from "../helpers/utils";
 
 export const getMoviesByGenre = async (req: Request, res: Response) => {
   const { genreId } = req.params;
   try {
-    const moviesByGenre = await prisma.movies.findMany({
+    const moviesByGenre = await prismaClient.movies.findMany({
       where: {
         genresIds: {
-          has: genreId,
+          has: convertToType(genreId),
         },
       },
     });
@@ -20,7 +21,7 @@ export const getMoviesByGenre = async (req: Request, res: Response) => {
 
 export const getAllGenres = async (req: Request, res: Response) => {
   try {
-    const genres = await prisma.genres.findMany({
+    const genres = await prismaClient.genres.findMany({
       select: {
         name: true,
         movies: {
