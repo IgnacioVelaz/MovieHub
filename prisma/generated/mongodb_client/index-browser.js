@@ -111,19 +111,21 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.MoviesScalarFieldEnum = {
   id: 'id',
+  tmdb_id: 'tmdb_id',
   name: 'name',
   poster_image: 'poster_image',
   score: 'score',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   genresIds: 'genresIds',
+  tmdb_genresIds: 'tmdb_genresIds',
   userId: 'userId'
 };
 
 exports.Prisma.GenresScalarFieldEnum = {
   id: 'id',
-  updatedAt: 'updatedAt',
   name: 'name',
+  tmdb_id: 'tmdb_id',
   moviesIds: 'moviesIds'
 };
 

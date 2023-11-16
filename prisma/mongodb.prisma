@@ -21,26 +21,28 @@ model User {
 }
 
 model Movies {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String   @unique
-  poster_image String
-  score        Float
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  genresIds    String[] @db.ObjectId
-  genres       Genres[] @relation(fields: [genresIds], references: [id])
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String   @db.ObjectId
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  tmdb_id        Int
+  name           String   @unique
+  poster_image   String
+  score          Float
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  genresIds      String[] @db.ObjectId
+  tmdb_genresIds Int[]
+  genres         Genres[] @relation(fields: [genresIds], references: [id])
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String   @db.ObjectId
 
   @@map("movies")
 }
 
 model Genres {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  updatedAt DateTime? @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  moviesIds String[]  @db.ObjectId
-  movies    Movies[]  @relation(fields: [moviesIds], references: [id])
+  tmdb_id   Int
+  moviesIds String[] @db.ObjectId
+  movies    Movies[] @relation(fields: [moviesIds], references: [id])
 
   @@map("genres")
 }
