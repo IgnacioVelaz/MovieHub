@@ -6,12 +6,11 @@ import genreRoutes from "./routes/genre.routes";
 
 const app = Express();
 
-app.use(helmet())
+app.use(helmet());
 app.use(Express.json());
-
 
 app.use("/users", userRoutes);
 app.use("/movies", movieRoutes);
-app.use("/genres", genreRoutes)
+app.use("/genres", genreRoutes);
 
 export default app;

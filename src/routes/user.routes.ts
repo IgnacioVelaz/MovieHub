@@ -5,10 +5,11 @@ import {
   getUserById,
   updateUser,
 } from "../controllers/user.controllers";
+import { jwtCheckMiddleware } from "../middlewares/jwtCheck";
 
 const userRoutes = Router();
 
-userRoutes.get("/:userId", getUserById);
+userRoutes.get("/:userId", jwtCheckMiddleware, getUserById);
 
 userRoutes.post("/", createUser);
 
