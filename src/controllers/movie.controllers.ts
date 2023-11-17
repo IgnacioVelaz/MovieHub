@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import { prismaClient } from "../db/client";
 import { convertToType } from "../helpers/utils";
+import { tmdbToMongoGenresIds } from "../utils/utils";
 
 export const createMovie = async (req: Request, res: Response) => {
   console.log("init createMovie Back");
   console.log("req body:", req.body);
-  const { name, poster_image, genres, score, tmdb_id, tmdb_genresIds } =
-    req.body;
+  const { name, poster_image, score, tmdb_id, tmdb_genresIds } = req.body;
+
   const { userId } = req.params;
+  const genres = tmdbToMongoGenresIds(tmdb_genresIds);
   console.log("req body:", req.body);
   try {
     const movie = await prismaClient.movies.create({
