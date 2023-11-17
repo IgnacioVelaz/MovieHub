@@ -3,15 +3,20 @@ import { prismaClient } from "../db/client";
 import { convertToType } from "../helpers/utils";
 
 export const createMovie = async (req: Request, res: Response) => {
-  const { name, poster_image, genres, score } = req.body;
+  console.log("init createMovie Back");
+  console.log("req body:", req.body);
+  const { name, poster_image, genres, score, tmdb_id, tmdb_genresIds } =
+    req.body;
   const { userId } = req.params;
-
+  console.log("req body:", req.body);
   try {
     const movie = await prismaClient.movies.create({
       data: {
+        tmdb_id,
         name,
         poster_image,
         score,
+        tmdb_genresIds: tmdb_genresIds.map((genreId: number) => genreId),
         genres: {
           connect: genres.map((genre: string) => ({
             id: convertToType(genre),
@@ -23,6 +28,7 @@ export const createMovie = async (req: Request, res: Response) => {
 
     res.status(201).send(movie);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };

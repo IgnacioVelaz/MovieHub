@@ -3,9 +3,11 @@ import helmet from "helmet";
 import userRoutes from "./routes/user.routes";
 import movieRoutes from "./routes/movie.routes";
 import genreRoutes from "./routes/genre.routes";
+const cors = require("cors");
 
 const app = Express();
 
+app.use(cors());
 app.use(helmet());
 app.use(Express.json());
 

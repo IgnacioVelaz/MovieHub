@@ -22,7 +22,7 @@ model User {
 
 model Movies {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  tmdb_id        Int
+  tmdb_id        Int?
   name           String   @unique
   poster_image   String
   score          Float
