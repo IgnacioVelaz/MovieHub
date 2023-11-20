@@ -12,7 +12,7 @@ app.use(cors());
 app.use(helmet());
 app.use(Express.json());
 
-app.use("/users", userRoutes);
+app.use("/users", jwtCheckMiddleware, userRoutes);
 app.use("/movies", jwtCheckMiddleware, movieRoutes);
 app.use("/genres", jwtCheckMiddleware, genreRoutes);
 

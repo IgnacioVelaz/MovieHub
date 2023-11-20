@@ -11,7 +11,7 @@ const userRoutes = Router();
 
 userRoutes.get("/:userId", getUserById);
 
-userRoutes.post("/", jwtCheckMiddleware, getUserByEmailAddress);
+userRoutes.post("/", getUserByEmailAddress);
 
 userRoutes.patch("/:userId", updateUser);
 
