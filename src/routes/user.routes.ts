@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  createUser,
   deleteUser,
   getUserByEmailAddress,
   getUserById,
@@ -10,9 +9,9 @@ import { jwtCheckMiddleware } from "../middlewares/jwtCheck";
 
 const userRoutes = Router();
 
-userRoutes.get("/:userId", jwtCheckMiddleware, getUserById);
+userRoutes.get("/:userId", getUserById);
 
-userRoutes.post("/", getUserByEmailAddress);
+userRoutes.post("/", jwtCheckMiddleware, getUserByEmailAddress);
 
 userRoutes.patch("/:userId", updateUser);
 
