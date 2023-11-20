@@ -13,7 +13,7 @@ movieRoutes.get("/:userId", getMoviesByUserId);
 movieRoutes.post("/:userId", createMovie);
 
 movieRoutes.get("/:userId/:movieId", getMovieById);
-movieRoutes.patch("/:userId/:movieId", updateMovie);
+movieRoutes.patch("/:movieId", updateMovie);
 movieRoutes.delete("/:userId/:movieId", deleteMovie);
 
 export default movieRoutes;

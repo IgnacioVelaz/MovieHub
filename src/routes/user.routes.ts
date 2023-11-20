@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createUser,
   deleteUser,
+  getUserByEmailAddress,
   getUserById,
   updateUser,
 } from "../controllers/user.controllers";
@@ -11,7 +12,7 @@ const userRoutes = Router();
 
 userRoutes.get("/:userId", jwtCheckMiddleware, getUserById);
 
-userRoutes.post("/", createUser);
+userRoutes.post("/", getUserByEmailAddress);
 
 userRoutes.patch("/:userId", updateUser);
 

@@ -6,7 +6,7 @@ import { tmdbToMongoGenresIds } from "../utils/utils";
 export const createMovie = async (req: Request, res: Response) => {
   console.log("init createMovie Back");
   console.log("req body:", req.body);
-  const { name, poster_image, score, tmdb_id, tmdb_genresIds } = req.body;
+  const { name, poster_image, score, tmdb_id, tmdb_genresIds, type } = req.body;
 
   const { userId } = req.params;
   const genres = tmdbToMongoGenresIds(tmdb_genresIds);
@@ -18,6 +18,7 @@ export const createMovie = async (req: Request, res: Response) => {
         name,
         poster_image,
         score,
+        type,
         tmdb_genresIds: tmdb_genresIds.map((genreId: number) => genreId),
         genres: {
           connect: genres.map((genre: string) => ({
@@ -44,8 +45,11 @@ export const getMoviesByUserId = async (req: Request, res: Response) => {
         movies: {
           select: {
             name: true,
+            id: true,
+            tmdb_id: true,
             poster_image: true,
             score: true,
+            type: true,
             genres: {
               select: { name: true },
             },
@@ -56,6 +60,7 @@ export const getMoviesByUserId = async (req: Request, res: Response) => {
 
     res.status(200).json(user);
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 };
@@ -83,20 +88,21 @@ export const getMovieById = async (req: Request, res: Response) => {
 };
 
 export const updateMovie = async (req: Request, res: Response) => {
-  const { name, poster_image, genresIds, score } = req.body;
   const { movieId } = req.params;
+  console.log("initializing movie update");
 
   try {
-    const updatedMovie = await prismaClient.movies.update({
-      where: { id: convertToType(movieId) },
-      data: {
-        name: name,
-        poster_image: poster_image,
-        score: score,
-        genresIds: genresIds.map((genre: string) => convertToType(genre)),
-      },
+    const movieDataToUpdate: Record<string, any> = {};
+
+    Object.keys(req.body).forEach((field) => {
+      movieDataToUpdate[field] = req.body[field];
     });
 
+    const updatedMovie = await prismaClient.movies.update({
+      where: { id: convertToType(movieId) },
+      data: movieDataToUpdate,
+    });
+    console.log(updatedMovie);
     res.status(201).json(updatedMovie);
   } catch (error) {
     res.status(500).json(error);

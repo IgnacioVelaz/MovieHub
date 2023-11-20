@@ -3,10 +3,13 @@ import { prismaClient } from "../db/client";
 import { convertToType } from "../helpers/utils";
 
 export const createUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  console.log("Creating user!");
+  const { name, email } = req.body;
+  console.log(req.body);
 
   try {
-    if (!name || !email || !password) {
+    if (!name || !email) {
+      console.log("missing fields!");
       res.status(400).json({ error: "Missing required fields" });
       return;
     }
@@ -15,12 +18,51 @@ export const createUser = async (req: Request, res: Response) => {
       data: {
         name,
         email,
-        password,
       },
     });
 
     res.status(201).json(newUser);
   } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
+
+export const getUserByEmailAddress = async (req: Request, res: Response) => {
+  const { email } = req.body;
+  console.log("Get users by email address body:", req.body);
+  console.log("request body en el back", req.body);
+  console.log(email);
+  try {
+    const user = await prismaClient.user.findUnique({
+      where: { email: email },
+      select: {
+        email: true,
+        name: true,
+        id: true,
+        movies: {
+          select: {
+            name: true,
+            poster_image: true,
+            score: true,
+            genres: {
+              select: { name: true },
+            },
+          },
+        },
+      },
+    });
+
+    if (user) {
+      res.status(200).json(user);
+    }
+
+    if (!user) {
+      console.log("User not stored in database!");
+      await createUser(req, res);
+    }
+  } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 };
